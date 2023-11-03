@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ThemeService } from './services/theme.service';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +7,13 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'odilo-app';
+  title = 'Odilo';
+  isDark:boolean = false;
+
+  constructor(private themeService: ThemeService) {
+    this.themeService.getTheme().subscribe(theme => {
+      this.isDark = theme;
+    });
+
+  }
 }

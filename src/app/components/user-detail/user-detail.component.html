@@ -1,0 +1,53 @@
+<p *ngIf="error">
+  Hubo un error en la carga de datos
+</p>
+<mat-card class="user-card" *ngIf="user && !error">
+  <mat-card-header>
+    <div mat-card-avatar class="user-header-image" style="background-image: url({{user.avatar_url}});">
+    </div>
+    <mat-card-title>Name user: {{ user.login }}</mat-card-title>
+    <mat-card-subtitle>Followers: {{ user.followers?.length }}</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <p *ngIf="user.score">
+      score: {{ user.score }}
+    </p>
+    <div *ngIf="user.repos_url">
+      <h4>Profile url:</h4>
+      <a mat-button color="accent" href="{{user.url}}">
+        {{ user.url }}
+      </a>
+    </div>
+    <div *ngIf="user.repos_url">
+      <h4>Repositories url:</h4>
+      <a mat-button color="accent" href="{{ user.repos_url }}">
+        {{ user.repos_url }}
+      </a>
+    </div>
+  </mat-card-content>
+  <mat-card-content *ngIf="user.followers && user.followers.length > 0">
+    <div class="title">
+      <mat-card-title>Followers</mat-card-title>
+    </div>
+    <div class="card-slide">
+      <div *ngFor="let userf of user.followers">
+        <div class="user" (click)="goToUserDetails(userf.login)">
+          <div mat-card-avatar class="user-header-image" style="background-image: url({{userf.avatar_url}});">
+          </div>
+          <mat-card-title>{{ userf.login | truncate: 10 }}</mat-card-title>
+        </div>
+      </div>
+    </div>
+  </mat-card-content>
+  <mat-card-content *ngIf="user.repositories && user.repositories.length > 0">
+    <div>
+      <h4>Repositories:</h4>
+      <div *ngFor="let repo of user.repositories">
+        <h5>name: {{ repo.name }}</h5>
+        <p>forks: {{repo.forks}}</p>
+        <p>visibility: {{repo.visibility}}</p>
+        <p></p>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

@@ -1,0 +1,12 @@
+<form [formGroup]="myForm" (ngSubmit)="onSubmit()" class="search-form">
+  <mat-form-field class="field-full-width">
+    <mat-label>Introduce el nombre de un usuario</mat-label>
+    <input matInput formControlName="username" />
+    <mat-error *ngIf="myForm.get('username')?.hasError('required')">Este campo es obligatorio</mat-error>
+    <mat-error *ngIf="myForm.get('username')?.hasError('minlength')">El nombre de usuario debe tener al menos 4 caracteres</mat-error>
+    <mat-error *ngIf="myForm.get('username')?.hasError('noStrider')">No se permite el nombre "gcpglobal"</mat-error>
+  </mat-form-field>
+  <button class="search-btn" mat-flat-button color="primary" type="submit" [disabled]="!myForm.valid">
+    Buscar <mat-icon>search</mat-icon>
+  </button>
+</form>

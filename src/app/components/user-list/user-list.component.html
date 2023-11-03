@@ -1,0 +1,40 @@
+<div *ngIf="isLoader">
+  <app-loader></app-loader>
+</div>
+<div *ngIf="error">
+  <h3>Hubo un error en la carga de datos</h3>
+</div>
+<div *ngIf="!error && !isLoader && users?.length === 0 && username !==''">
+  <h3>No hay usuarios que coincidan con {{ username }}</h3>
+</div>
+<div *ngIf="!error && !isLoader && users?.length !== 0">
+  <div class="card-container">
+    <mat-card *ngFor="let user of users" class="user-card">
+      <mat-card-header>
+        <div mat-card-avatar class="user-header-image" style="background-image: url({{user.avatar_url}});">
+
+        </div>
+        <mat-card-title>{{ user.login | truncate: 9 }}</mat-card-title>
+        <mat-card-subtitle>Followers: {{ user.followers?.length }}</mat-card-subtitle>
+        <mat-card-subtitle>Socre: {{ user.score }}</mat-card-subtitle>
+      </mat-card-header>
+      <img mat-card-image [src]="user.avatar_url" alt="Avatar">
+      <mat-card-actions>
+        <button (click)="goToUserDetails(user.login)" mat-flat-button color="primary"
+          aria-label="Example icon button with a bookmark icon">
+          <mat-icon>content_paste_go</mat-icon> Ir al detalle
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+  <div class="button-container">
+    <!-- <button (click)="prevPage()" mat-flat-button [disabled]="invalidPrev" color="primary"
+      aria-label="Example icon button with a bookmark icon">
+      Prev <mat-icon>arrow_back_ios</mat-icon>
+    </button>
+    <button (click)="nextPage()" mat-flat-button [disabled]="invalidNext" color="primary"
+      aria-label="Example icon button with a bookmark icon">
+      Next <mat-icon>arrow_forward_ios</mat-icon>
+    </button> -->
+  </div>
+</div>

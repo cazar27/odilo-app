@@ -1,0 +1,35 @@
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  img.logo-odilo {
+    width: 140px;
+  }
+}
+
+.header-banner {
+  background: #6974ad;
+  background:
+    radial-gradient(circle, #6974ad 0%, #1d1e1f 100%);
+  min-height: 9em;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  h1 {
+    font-size: xxx-large;
+    color: white;
+    padding: 30px;
+    font-family: Roboto, sans-serif;
+  }
+}
+
+.slide .mat-icon{
+  font-size: 2em;
+  height: 30px;
+  transition: all .400 ease;
+}
+
+.dark {
+  color:white;
+  text-shadow: 1px -1px 2px #FFC107;
+  transition: all .400 ease;
+}
