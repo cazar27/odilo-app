@@ -9,14 +9,13 @@ import { environment } from 'environments/environment';
 export class GithubService {
 
   private apiUrl = 'https://api.github.com/search/users';
-  private token = environment.githubApiToken;
 
   constructor(private http: HttpClient) { }
 
   getUserDetailsByLogin(login: string): Observable<any> {
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
+    
     const url = `${this.apiUrl}?q=${login}`;
-    return this.http.get(url, { headers });
+    return this.http.get(url);
   }
 
   getUserScoreByLogin(login: string): boolean {
@@ -32,15 +31,14 @@ export class GithubService {
   }
 
   getUsers(username: string, page: number): Observable<any> {
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
     const perPage = 10;
     const url = `${this.apiUrl}?q=${username}&page=${page}&per_page=${perPage}`;
-    return this.http.get(url, { headers });
+    return this.http.get(url);
   }
 
   getByUrl(userFwUrl: string): Observable<any> {
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
+    
     const url = `${userFwUrl}`;
-    return this.http.get(url, { headers });
+    return this.http.get(url);
   }
 }
