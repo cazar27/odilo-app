@@ -29,7 +29,6 @@ export class ChartComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-
     this.userDataService.getUsername().subscribe(username => {
       this.username = username;
       this.loadUsers();
@@ -41,15 +40,15 @@ export class ChartComponent implements OnInit {
     this.users = [];
 
     if (this.username && this.username.length >= 4 && this.username.toLowerCase() !== 'gcpglobal') {
-      this.githubService.getUsers(this.username,1)
+      this.githubService.getInfoUsers(this.username,1)
         .subscribe(data => {
-          if (data) {
-            this.users = data.items;
+          if (data.length > 0) {
+            this.users = data;
             const labels: string []= []
             const dataset: number []= []
             this.users.forEach(user=> {
               labels.push(user.login)
-              dataset.push(user.score?user.score:0);
+              dataset.push(user.followers?user.followers.length:0);
             })
             this.barChartData = {
               labels: labels,
@@ -57,22 +56,25 @@ export class ChartComponent implements OnInit {
                 { data: dataset, label: 'Followers' },
               ]
             };
+          } else {
+            this.restart();
           }
         })
     } else {
-      this.users = [];
-      this.barChartData = {
-        labels: [],
-        datasets: [
-          { data: [], label: 'Followers' },
-        ]
-      };
+      this.restart();
     }
   }
-
 
   public barChartOptions: ChartConfiguration<'bar'>['options'] = {
     responsive: true,
   };
+
+  private restart() {
+    this.users = [];
+    this.barChartData = {
+      labels: [],
+      datasets: []
+    };
+  }
 
 }

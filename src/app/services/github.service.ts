@@ -13,7 +13,7 @@ export class GithubService {
 
   constructor(private http: HttpClient) { }
 
-  getUserDetailsByLogin(login: string): Observable<any> { 
+  getUserDetailsByLogin(login: string): Observable<any> {
     const url = `${this.apiUrl}?q=${login}`;
     return this.http.get(url);
   }
@@ -21,8 +21,8 @@ export class GithubService {
   getUserScoreByLogin(login: string): Observable<boolean> {
     return this.getUserDetailsByLogin(login).pipe(
       map(data => {
-        const user = data.items[0]; // probablemente cambiar mas adelante por getInfoUser quitar item[0] 
-        return user.score > 20;
+        const user = data.items[0]; // probablemente cambiar mas adelante por getInfoUser quitar item[0]
+        return user.score > 0; // TODO: cambiar al 20
       }),
        catchError(error => {
         console.error('Error al obtener detalles del usuario:', error);
@@ -30,30 +30,32 @@ export class GithubService {
       })
     );
   }
-  
-  getInfoUser(login: string): Observable<GitHubUser> {
-    const url = `${this.apiUrl}?q=${login}`;
-    return this.http.get<any>(url).pipe(
-      map(response => {
-        if (response.total_count === 0) {
-          throw new Error('Usuario no encontrado');
-        }
-        const user = response.items[0] as GitHubUser;
-        const followersUrl = user.followers_url.replace('{/other_user}', '');
-        const reposUrl = user.repos_url;
-        const followersRequest = this.http.get<any>(followersUrl).pipe();
-        const reposRequest = this.http.get<any>(reposUrl).pipe();
 
-        return forkJoin([followersRequest, reposRequest]).pipe(
-          map(([followers, repositories]) => {
-            user.followers = followers;
-            user.repositories = repositories;
-            return user;
-          }),
-        );
-      })
-    );
-  }
+  // getInfoUser(login: string): Observable<GitHubUser> | undefined {
+  //   const url = `${this.apiUrl}?q=${login}`;
+  //   return this.http.get<any>(url).pipe(
+  //     map(response => {
+  //       if (response.total_count === 0) {
+  //         throw new Error('Usuario no encontrado');
+  //         return throwError(error);
+  //       } else {
+  //         const user = response.items[0] as GitHubUser;
+  //         const followersUrl = user.followers_url;
+  //         const reposUrl = user.repos_url;
+  //         const followersRequest =  this.getByUrl(followersUrl);
+  //         const reposRequest = this.getByUrl(reposUrl);
+  //         return forkJoin([followersRequest, reposRequest]).pipe(
+  //           map(([followers, repositories]) => {
+  //             user.followers = followers;
+  //             user.repositories = repositories;
+  //             return user;
+  //           }),
+  //         );
+  //       }
+
+  //     })
+  //   );
+  // }
 
   getInfoUsers(username: string, page: number): Observable<GitHubUser[]> {
     const perPage = 10;
@@ -62,18 +64,19 @@ export class GithubService {
     return this.http.get<any>(url).pipe(
       mergeMap(response => {
         if (response.total_count === 0) {
-          throw new Error('Usuario no encontrado');
+          // acfredeee ejemplo
+          new Error('User not found');
         }
 
         const users: GitHubUser[] = response.items;
         const requests: Observable<any>[] = [];
 
         users.forEach(user => {
-          const followersUrl = user.followers_url.replace('{/other_user}', '');
+          const followersUrl = user.followers_url;
           const reposUrl = user.repos_url;
 
-          const followersRequest = this.http.get<any>(followersUrl);
-          const reposRequest = this.http.get<any>(reposUrl);
+          const followersRequest =  this.getByUrl(followersUrl);
+          const reposRequest = this.getByUrl(reposUrl);
 
           const userRequest = forkJoin([followersRequest, reposRequest]).pipe(
             map(([followers, repositories]) => {
@@ -90,7 +93,6 @@ export class GithubService {
       })
     );
   }
-
 
   getUsers(username: string, page: number): Observable<any> {
     const perPage = 10;

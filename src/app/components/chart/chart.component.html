@@ -1,5 +1,5 @@
 <canvas baseChart
-  *ngIf="barChartData"
+  *ngIf="barChartData.datasets !== []"
   [data]="barChartData"
   [options]="barChartOptions"
   [plugins]="barChartPlugins"

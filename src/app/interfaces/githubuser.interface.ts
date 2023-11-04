@@ -4,7 +4,7 @@ export interface GitHubUser {
   avatar_url: string;
   followers_url: string;
   followers?: GitHubUser[];
-  repos_url?: string;
+  repos_url: string;
   repositories?: any[];
   node_id?: string;
   gravatar_id?: string;
