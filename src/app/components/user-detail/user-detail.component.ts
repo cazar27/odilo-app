@@ -30,35 +30,14 @@ export class UserDetailComponent {
   }
 
   loadUserDetails(login: string = ''): void {
-    this.githubService.getUserDetailsByLogin(login).pipe(
+    this.githubService.getUserDetailsInfoByLogin(login).pipe(
       catchError(error => {
-        console.error('Error al obtener detalles del usuario:', error);
+        console.error('Error: ', error);
         this.alertService.error(error.error.message);
-        return throwError(error);
+        return throwError(() => error);
       })
     ).subscribe(data => {
-      this.user = data.items[0];
-      if(this.user) {
-        this.githubService.getByUrl(data.items[0].followers_url).pipe(
-          catchError(error => {
-            console.error(`Error al obtener seguidores para ${this.user.login}:`, error);
-            this.alertService.error(error.error.message);
-            return [];
-          })
-        ).subscribe(followers => {
-          this.user.followers = followers;
-        });
-
-        this.githubService.getByUrl(data.items[0].repos_url).pipe(
-          catchError(error => {
-            console.error(`Error al obtener seguidores para ${this.user.login}:`, error);
-            this.alertService.error(error.error.message);
-            return [];
-          })
-        ).subscribe(repositories => {
-          this.user.repositories = repositories;
-        });
-      }
+      this.user = data[0];
     });
   }
 

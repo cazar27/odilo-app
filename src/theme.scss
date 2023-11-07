@@ -38,6 +38,7 @@ $dark-theme: mat.define-light-theme(
   min-height: 100vh;
   .mat-mdc-unelevated-button[disabled][disabled] {
     color: #7b7a7a;
+    border: 2px solid #7b7a7a;
   }
 
   .mdc-text-field--filled {

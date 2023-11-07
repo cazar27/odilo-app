@@ -12,6 +12,7 @@ body {
 //TODO: Meter los estilos del snackbar en otro scss en la carpeta de assets
 
 .mat-mdc-snack-bar-container {
+  color: white;
   &.error-snackbar .mdc-snackbar__surface {
     background-color: #c50000 !important;
     border: 2px solid #ff7e7e;

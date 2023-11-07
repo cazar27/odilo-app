@@ -7,13 +7,13 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({ providedIn: 'root' })
 export class AlertService {
-  private subject = new Subject<Alert>();
-  private defaultId = 'default-alert';
+  private _subject = new Subject<Alert>();
+  private _defaultId = 'default-alert';
 
   constructor(private snackBar: MatSnackBar) { }
 
-  onAlert(id = this.defaultId): Observable<Alert> {
-    return this.subject.asObservable().pipe(filter(x => x && x.id === id));
+  onAlert(id = this._defaultId): Observable<Alert> {
+    return this._subject.asObservable().pipe(filter(x => x && x.id === id));
   }
 
   // convenience methods
@@ -34,8 +34,8 @@ export class AlertService {
   }
 
   alert(alert: Alert) {
-    alert.id = alert.id || this.defaultId;
-    this.subject.next(alert);
+    alert.id = alert.id || this._defaultId;
+    this._subject.next(alert);
 
     this.snackBar.open(alert.message, 'Cerrar', {
       //duration: 5000,
@@ -45,8 +45,8 @@ export class AlertService {
     });
   }
 
-  clear(id = this.defaultId) {
-    this.subject.next(new Alert({ id }));
+  clear(id = this._defaultId) {
+    this._subject.next(new Alert({ id }));
   }
 
   private getSnackBarCssClass(alertType: AlertType): string {

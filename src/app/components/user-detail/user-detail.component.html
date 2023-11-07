@@ -14,6 +14,9 @@
     </p>
     <div *ngIf="user.repos_url">
       <h4>Profile url:</h4>
+      <a mat-button color="accent" href="{{'https://github.com/'+user.login}}">
+        {{ 'https://github.com/'+user.login }}
+      </a>
       <a mat-button color="accent" href="{{user.url}}">
         {{ user.url }}
       </a>

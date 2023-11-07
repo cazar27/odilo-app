@@ -7,7 +7,7 @@ import { environment } from 'environments/environment';
 export class HttpConfigInterceptor implements HttpInterceptor {
 
   private token = environment.githubApiToken;
-  
+
   intercept( request: HttpRequest<any>,next: HttpHandler): Observable<HttpEvent<any>> {
     const modifiedRequest = request.clone({
       setHeaders: {
@@ -16,7 +16,7 @@ export class HttpConfigInterceptor implements HttpInterceptor {
         'Accept': 'application/vnd.github.v3+json'
       }
     });
-    
+
     return next.handle(modifiedRequest);
   }
 }

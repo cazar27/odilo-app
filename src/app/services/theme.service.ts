@@ -6,13 +6,13 @@ import { BehaviorSubject, Observable } from 'rxjs';
 })
 export class ThemeService {
 
-  private themeSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private _themeSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   setTheme(theme: boolean): void {
-    this.themeSubject.next(theme);
+    this._themeSubject.next(theme);
   }
 
   getTheme(): Observable<boolean> {
-    return this.themeSubject.asObservable();
+    return this._themeSubject.asObservable();
   }
 }
