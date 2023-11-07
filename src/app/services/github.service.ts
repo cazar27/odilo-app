@@ -11,81 +11,30 @@ export class GithubService {
 
   private apiUrl = 'https://api.github.com/search/users';
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient
+  ) { }
 
   getUserDetailsByLogin(login: string): Observable<any> {
     const url = `${this.apiUrl}?q=${login}`;
     return this.http.get(url);
   }
 
-  getUserScoreByLogin(login: string): Observable<boolean> {
+
+  getUserDetailsInfoByLogin(login: string): Observable<GitHubUser[]> {
     return this.getUserDetailsByLogin(login).pipe(
-      map(data => {
-        const user = data.items[0]; // probablemente cambiar mas adelante por getInfoUser quitar item[0]
-        return user.score > 0; // TODO: cambiar al 20
-      }),
-       catchError(error => {
-        console.error('Error al obtener detalles del usuario:', error);
-        return throwError(error);
-      })
-    );
-  }
-
-  // getInfoUser(login: string): Observable<GitHubUser> | undefined {
-  //   const url = `${this.apiUrl}?q=${login}`;
-  //   return this.http.get<any>(url).pipe(
-  //     map(response => {
-  //       if (response.total_count === 0) {
-  //         throw new Error('Usuario no encontrado');
-  //         return throwError(error);
-  //       } else {
-  //         const user = response.items[0] as GitHubUser;
-  //         const followersUrl = user.followers_url;
-  //         const reposUrl = user.repos_url;
-  //         const followersRequest =  this.getByUrl(followersUrl);
-  //         const reposRequest = this.getByUrl(reposUrl);
-  //         return forkJoin([followersRequest, reposRequest]).pipe(
-  //           map(([followers, repositories]) => {
-  //             user.followers = followers;
-  //             user.repositories = repositories;
-  //             return user;
-  //           }),
-  //         );
-  //       }
-
-  //     })
-  //   );
-  // }
-
-  getInfoUsers(username: string, page: number): Observable<GitHubUser[]> {
-    const perPage = 10;
-    const url = `${this.apiUrl}?q=${username}&page=${page}&per_page=${perPage}`;
-
-    return this.http.get<any>(url).pipe(
       mergeMap(response => {
         if (response.total_count === 0) {
           // acfredeee ejemplo
-          new Error('User not found');
+          const error = new Error('User not found');
+          return throwError(() => error);
         }
 
         const users: GitHubUser[] = response.items;
-        const requests: Observable<any>[] = [];
+        const requests: Observable<GitHubUser>[] = [];
 
         users.forEach(user => {
-          const followersUrl = user.followers_url;
-          const reposUrl = user.repos_url;
-
-          const followersRequest =  this.getByUrl(followersUrl);
-          const reposRequest = this.getByUrl(reposUrl);
-
-          const userRequest = forkJoin([followersRequest, reposRequest]).pipe(
-            map(([followers, repositories]) => {
-              user.followers = followers;
-              user.repositories = repositories;
-              return user;
-            })
-          );
-
+          const userRequest = this.getUserDetails(user);
           requests.push(userRequest);
         });
 
@@ -94,8 +43,61 @@ export class GithubService {
     );
   }
 
-  getUsers(username: string, page: number): Observable<any> {
+  getUserScoreByLogin(login: string): Observable<boolean> {
+    return this.getUserDetailsInfoByLogin(login).pipe(
+      map(data => {
+        const user = data[0];
+        return user.score?user.score > 20:false;
+      }),
+       catchError(error => {
+        console.error('Error:', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
+  private getUserDetails(user: GitHubUser): Observable<GitHubUser> {
+    const followersUrl = user.followers_url;
+    const reposUrl = user.repos_url;
+
+    const followersRequest = this.getByUrl(followersUrl);
+    const reposRequest = this.getByUrl(reposUrl);
+
+    return forkJoin([followersRequest, reposRequest]).pipe(
+      map(([followers, repositories]) => {
+        user.followers = followers;
+        user.repositories = repositories;
+        return user;
+      })
+    );
+  }
+
+  getInfoUsers(username: string): Observable<GitHubUser[]> {
+
+    return this.getUsers(username).pipe(
+      mergeMap(response => {
+        if (response.total_count === 0) {
+          // acfredeee ejemplo
+          const error = new Error('User not found');
+          return throwError(() => error);
+        }
+
+        const users: GitHubUser[] = response.items;
+        const requests: Observable<any>[] = [];
+
+        users.forEach(user => {
+          const userRequest = this.getUserDetails(user);
+          requests.push(userRequest);
+        });
+
+        return forkJoin(requests);
+      })
+    );
+  }
+
+  getUsers(username: string): Observable<any> {
     const perPage = 10;
+    const page = 1;
     const url = `${this.apiUrl}?q=${username}&page=${page}&per_page=${perPage}`;
     return this.http.get(url);
   }

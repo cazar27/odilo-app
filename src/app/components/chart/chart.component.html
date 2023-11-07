@@ -1,9 +1,11 @@
-<canvas baseChart
-  *ngIf="barChartData.datasets !== []"
-  [data]="barChartData"
-  [options]="barChartOptions"
-  [plugins]="barChartPlugins"
-  [legend]="barChartLegend"
-  [type]="'bar'"
-  class="chart"
-></canvas>
+<div class="container-chart" *ngIf="barChartData.datasets.length > 0 && users.length > 0">
+  <canvas
+    baseChart
+    [data]="barChartData"
+    [options]="barChartOptions"
+    [plugins]="barChartPlugins"
+    [legend]="barChartLegend"
+    [type]="'bar'"
+    class="chart"
+  ></canvas>
+</div>

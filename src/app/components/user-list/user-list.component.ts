@@ -17,7 +17,7 @@ export class UserListComponent implements OnInit {
   invalidNext: boolean = false;
   invalidPrev: boolean = true;
   isLoader: boolean = false;
-  error:boolean = false;
+  error: boolean = false;
   // TODO: remove here to add nex and prev in service
   currentPage: number = 1;
   totalItems: number = 0;
@@ -56,57 +56,30 @@ export class UserListComponent implements OnInit {
     this.isLoader = true;
 
     if (this.username && this.username.length >= 4 && this.username.toLowerCase() !== 'gcpglobal') {
-      this.githubService.getInfoUsers(this.username,1)
-      .subscribe(data => {
-        if (data.length > 0) {
-          this.users = data;
-          this.isLoader = false;
-          this.error = false;
-        }
-      })
+      this.githubService.getInfoUsers(this.username)
+        .pipe(
+          catchError(error => {
+            this.error = true;
+            this.isLoader = false;
+            this.users = [];
+            console.error('Error: ', error);
+            if (error.message === 'User not found')
+              this.alertService.warn(`List ${error}`)
+            else
+              this.alertService.error(`List ${error.error.message}`)
+            return throwError(() => error);
+          })
+        ).subscribe(data => {
+          if (data.length > 0) {
+            this.users = data;
+            this.isLoader = false;
+            this.error = false;
+          }
+        })
     } else {
       this.users = [];
       this.isLoader = false;
     }
-    //   this.githubService.getUsers(this.username, this.currentPage)
-    //     .pipe(
-    //       catchError(error => {
-    //         this.error = true;
-    //         this.isLoader = false;
-    //         this.alertService.error(error.error.message);
-    //         return throwError(error);
-    //       }),
-    //       switchMap(data => {
-    //         if (data.items.length > 0) {
-    //           this.totalItems = data.total_count;
-    //           this.users = data.items;
-    //           const followersRequests = this.users.map(user => {
-    //             return this.githubService.getByUrl(user.followers_url).pipe(
-    //               catchError(error => {
-    //                 this.error = true;
-    //                 this.isLoader = false;
-    //                 this.alertService.error(error.error.message);
-    //                 return of([]);
-    //               })
-    //             );
-    //           });
-    //           return forkJoin(followersRequests);
-    //         } else {
-    //           this.isLoader = false;
-    //           return of([]);
-    //         }
-    //       })
-    //     )
-    //     .subscribe(followersArray => {
-    //       this.isLoader = false;
-    //       this.users.forEach((user, index) => {
-    //         user.followers = followersArray[index];
-    //       });
-    //     });
-    // } else {
-    //   this.users = [];
-    //   this.isLoader = false;
-    // }
   }
 
   goToUserDetails(param: string): void {
@@ -114,20 +87,20 @@ export class UserListComponent implements OnInit {
   }
 
   nextPage(): void {
-    if (this.totalItems / this.numItems >= this.currentPage) {
-      this.currentPage++;
-      this.loadUsers();
-      this.invalidPrev = false;
-    }
-    if (this.totalItems / this.numItems < this.currentPage) {
-      this.invalidNext = true;
-    }
+    // if (this.totalItems / this.numItems >= this.currentPage) {
+    //   this.currentPage++;
+    //   this.loadUsers();
+    //   this.invalidPrev = false;
+    // }
+    // if (this.totalItems / this.numItems < this.currentPage) {
+    //   this.invalidNext = true;
+    // }
   }
 
   prevPage(): void {
-    if (this.currentPage > 1) {
-      this.currentPage--;
-      this.loadUsers();
-    }
+    // if (this.currentPage > 1) {
+    //   this.currentPage--;
+    //   this.loadUsers();
+    // }
   }
 }

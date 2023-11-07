@@ -16,13 +16,8 @@ const routes: Routes = [
     canActivate: [scoreControlGuard]
   },
   {
-    path: '',
-    redirectTo: 'home/list',
-    pathMatch: 'full'
-  },
-  {
     path: '**',
-    redirectTo: 'home/list'
+    redirectTo: 'list'
   },
 ];
 
