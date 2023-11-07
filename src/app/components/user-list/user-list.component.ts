@@ -4,7 +4,7 @@ import { GithubService } from 'src/app/services/github.service';
 import { UserDataService } from 'src/app/services/user-data.service';
 import { Router } from '@angular/router';
 import { catchError } from 'rxjs/internal/operators/catchError';
-import { forkJoin, of, switchMap, throwError } from 'rxjs';
+import { throwError } from 'rxjs';
 import { AlertService } from 'src/app/services/alert.service';
 
 @Component({
@@ -14,14 +14,11 @@ import { AlertService } from 'src/app/services/alert.service';
 })
 export class UserListComponent implements OnInit {
   users: GitHubUser[] = [];
-  invalidNext: boolean = false;
-  invalidPrev: boolean = true;
+  invalidNext = this.githubService.nextButtonDisabled$;
+  invalidPrev = this.githubService.prevButtonDisabled$
   isLoader: boolean = false;
   error: boolean = false;
-  // TODO: remove here to add nex and prev in service
-  currentPage: number = 1;
-  totalItems: number = 0;
-  numItems: number = 10;
+
   @Input() username: string = '';
 
   constructor(
@@ -33,10 +30,14 @@ export class UserListComponent implements OnInit {
 
   ngOnInit(): void {
     this.users = [];
-    this.currentPage = 1;
 
     this.userDataService.getUsername().subscribe(username => {
       this.username = username;
+      this.githubService.currentPage = 1;
+      this.loadUsers();
+    });
+
+    this.githubService.currentPage$.subscribe(() => {
       this.loadUsers();
     });
   }
@@ -47,7 +48,6 @@ export class UserListComponent implements OnInit {
 
   private resetState() {
     this.users = [];
-    this.currentPage = 1;
   }
 
   private loadUsers(): void {
@@ -87,20 +87,10 @@ export class UserListComponent implements OnInit {
   }
 
   nextPage(): void {
-    // if (this.totalItems / this.numItems >= this.currentPage) {
-    //   this.currentPage++;
-    //   this.loadUsers();
-    //   this.invalidPrev = false;
-    // }
-    // if (this.totalItems / this.numItems < this.currentPage) {
-    //   this.invalidNext = true;
-    // }
+    this.githubService.next();
   }
 
   prevPage(): void {
-    // if (this.currentPage > 1) {
-    //   this.currentPage--;
-    //   this.loadUsers();
-    // }
+    this.githubService.prev();
   }
 }

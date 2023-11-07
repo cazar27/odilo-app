@@ -28,11 +28,11 @@
     </mat-card>
   </div>
   <div class="button-container">
-    <button (click)="prevPage()" mat-flat-button [disabled]="invalidPrev" color="primary"
+    <button (click)="prevPage()" mat-flat-button [disabled]="(invalidPrev | async)" color="primary"
       aria-label="Example icon button with a bookmark icon">
       Prev <mat-icon>arrow_back_ios</mat-icon>
     </button>
-    <button (click)="nextPage()" mat-flat-button [disabled]="invalidNext" color="primary"
+    <button (click)="nextPage()" mat-flat-button [disabled]="(invalidNext | async)" color="primary"
       aria-label="Example icon button with a bookmark icon">
       Next <mat-icon>arrow_forward_ios</mat-icon>
     </button>

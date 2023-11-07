@@ -6,13 +6,13 @@ import { BehaviorSubject, Observable } from 'rxjs';
 })
 
 export class UserDataService {
-  private usernameSubject: BehaviorSubject<string> = new BehaviorSubject<string>('');
+  private _usernameSubject: BehaviorSubject<string> = new BehaviorSubject<string>('');
 
   setUsername(username: string): void {
-    this.usernameSubject.next(username);
+    this._usernameSubject.next(username);
   }
 
   getUsername(): Observable<string> {
-    return this.usernameSubject.asObservable();
+    return this._usernameSubject.asObservable();
   }
 }

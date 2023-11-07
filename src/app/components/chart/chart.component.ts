@@ -32,6 +32,11 @@ export class ChartComponent implements OnInit {
     this.userDataService.getUsername().subscribe(username => {
       this.username = username;
       this.loadUsers();
+
+    });
+
+    this.githubService.currentPage$.subscribe(() => {
+      this.loadUsers();
     });
   }
 
