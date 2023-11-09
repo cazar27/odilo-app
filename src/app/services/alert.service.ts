@@ -16,7 +16,6 @@ export class AlertService {
     return this._subject.asObservable().pipe(filter(x => x && x.id === id));
   }
 
-  // convenience methods
   success(message: string, options?: any) {
     this.alert(new Alert({ ...options, type: AlertType.Success, message }));
   }
@@ -47,6 +46,7 @@ export class AlertService {
 
   clear(id = this._defaultId) {
     this._subject.next(new Alert({ id }));
+    this.snackBar.dismiss();
   }
 
   private getSnackBarCssClass(alertType: AlertType): string {
@@ -58,9 +58,7 @@ export class AlertService {
       case AlertType.Info:
         return 'info-snackbar';
       case AlertType.Warning:
-        return 'warning-snackbar';
-      default:
-        return '';
+        return 'warn-snackbar';
     }
   }
 }

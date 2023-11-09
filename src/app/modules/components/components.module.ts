@@ -6,7 +6,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatCardModule } from '@angular/material/card';
-import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 import { LoaderComponent } from 'src/app/components/loader/loader.component';
@@ -42,7 +41,6 @@ import { ChartComponent } from 'src/app/components/chart/chart.component';
     MatButtonModule,
     MatProgressBarModule,
     MatCardModule,
-    MatToolbarModule,
     MatIconModule,
     MatSlideToggleModule,
     NgChartsModule

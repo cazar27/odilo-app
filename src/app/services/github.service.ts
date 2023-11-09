@@ -38,7 +38,6 @@ export class GithubService {
     return this.http.get(url);
   }
 
-
   getUserDetailsInfoByLogin(login: string): Observable<GitHubUser[]> {
     return this.getUserDetailsByLogin(login).pipe(
       mergeMap(response => {
@@ -65,9 +64,9 @@ export class GithubService {
     return this.getUserDetailsInfoByLogin(login).pipe(
       map(data => {
         const user = data[0];
-        return user.score?user.score > 20:false;
+        return user.score ? user.score > 0 : false;
       }),
-       catchError(error => {
+      catchError(error => {
         return throwError(() => error);
       })
     );
@@ -100,6 +99,7 @@ export class GithubService {
         const users: GitHubUser[] = response.items;
         const requests: Observable<any>[] = [];
 
+        this.updateButtonStates();
         users.forEach(user => {
           const userRequest = this.getUserDetails(user);
           requests.push(userRequest);
@@ -107,7 +107,6 @@ export class GithubService {
         return forkJoin(requests);
       })
     );
-    this.updateButtonStates();
     return response;
   }
 
@@ -121,7 +120,6 @@ export class GithubService {
     const url = `${userFwUrl}`;
     return this.http.get(url);
   }
-
 
   next(): void {
     const currentPage = this._currentPageSubject.value;
@@ -146,7 +144,6 @@ export class GithubService {
     this._prevButtonDisabledSubject.next(currentPage <= 1);
     this._nextButtonDisabledSubject.next(currentPage >= totalPages);
   }
-
 
   private calculateTotalPages(): number {
     const totalItems = this._totalItems;

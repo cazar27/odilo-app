@@ -1,4 +1,4 @@
-<div [className]="isDark?'dark-theme':'light-theme'">
+<div [className]="isDark?'dark-theme':'light-theme'" [@routeAnimations]="prepareRoute(outlet)">
   <app-header></app-header>
-  <router-outlet></router-outlet>
+  <router-outlet #outlet="outlet"></router-outlet>
 </div>
