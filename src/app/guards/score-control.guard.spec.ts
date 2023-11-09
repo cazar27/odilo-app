@@ -4,8 +4,8 @@ import { CanActivateFn } from '@angular/router';
 import { scoreControlGuard } from './score-control.guard';
 
 describe('scoreControlGuard', () => {
-  const executeGuard: CanActivateFn = (...guardParameters) => 
-      TestBed.runInInjectionContext(() => scoreControlGuard(...guardParameters));
+  const executeGuard: CanActivateFn = (...guardParameters) =>
+    TestBed.runInInjectionContext(() => scoreControlGuard(...guardParameters));
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
