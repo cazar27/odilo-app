@@ -37,7 +37,7 @@ body {
     }
   }
 
-  &.warning-snackbar .mdc-snackbar__surface {
+  &.warn-snackbar .mdc-snackbar__surface {
     background-color: #FF9800 !important;
     border: 2px solid #ffedd2;
     .mat-mdc-button.mat-mdc-snack-bar-action:not(:disabled) {
