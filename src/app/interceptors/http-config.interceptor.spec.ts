@@ -5,6 +5,7 @@ import {
 } from '@angular/common/http/testing';
 import { HTTP_INTERCEPTORS, HttpClient } from '@angular/common/http';
 import { HttpConfigInterceptor } from './http-config.interceptor';
+import { environment } from 'environments/environment.prod';
 
 describe('HttpConfigInterceptor', () => {
   let http: HttpClient;
@@ -36,7 +37,7 @@ describe('HttpConfigInterceptor', () => {
 
     const httpRequest = httpMock.expectOne(dummyUrl);
     expect(httpRequest.request.headers.has('Authorization')).toBeTruthy();
-    expect(httpRequest.request.headers.get('Authorization')).toBe('Bearer your-access-token');
+    expect(httpRequest.request.headers.get('Authorization')).toBe('Bearer '+ environment.githubApiToken);
 
     httpRequest.flush(dummyResponse);
   });
