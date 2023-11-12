@@ -4,6 +4,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { AlertService } from './alert.service';
 import { Observable } from 'rxjs';
 import { Alert, AlertType } from '../models/alert.model';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('AlertService', () => {
   let service: AlertService;
@@ -11,7 +12,7 @@ describe('AlertService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [MatSnackBarModule],
+      imports: [MatSnackBarModule,BrowserAnimationsModule],
     });
     service = TestBed.inject(AlertService);
     snackBar = TestBed.inject(MatSnackBar);
