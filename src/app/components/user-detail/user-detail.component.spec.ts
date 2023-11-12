@@ -1,18 +1,19 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute } from '@angular/router';
-
+import { ComponentFixture, TestBed, tick, fakeAsync } from '@angular/core/testing';
+import { ActivatedRoute, Router } from '@angular/router';
+import { of, throwError } from 'rxjs';
 import { UserDetailComponent } from './user-detail.component';
 import { GithubService } from 'src/app/services/github.service';
-import { of } from 'rxjs';
-import { HttpClientModule } from '@angular/common/http';
-import { AppModule } from 'src/app/app.module';
-import { GitHubUser } from '../../interfaces/githubuser.interface';
+import { AlertService } from 'src/app/services/alert.service';
+import { GitHubUser } from 'src/app/interfaces/githubuser.interface';
 
 describe('UserDetailComponent', () => {
   let component: UserDetailComponent;
   let fixture: ComponentFixture<UserDetailComponent>;
   let activatedRoute: ActivatedRoute;
-  const githubService = jasmine.createSpyObj('GithubService', ['getUserDetailsInfoByLogin']);
+  let router: Router;
+  let githubService: jasmine.SpyObj<GithubService>;
+  let alertService: jasmine.SpyObj<AlertService>;
+
   const mockGitHubUser: GitHubUser = {
     "login": "cazar27",
     "id": 17564946,
@@ -36,26 +37,31 @@ describe('UserDetailComponent', () => {
   };
 
   beforeEach(() => {
-    githubService.getUserDetailsInfoByLogin.and.returnValue(of(mockGitHubUser));
     activatedRoute = {
-      paramMap: of({ get: (param: string) => 'cazar27' }),
-    } as ActivatedRoute;
+      params: of({ login: 'testUser' }),
+    } as any;
+
+    githubService = jasmine.createSpyObj('GithubService', ['getUserDetailsInfoByLogin']);
+    githubService.getUserDetailsInfoByLogin.and.returnValue(of([mockGitHubUser]));
+
+    alertService = jasmine.createSpyObj('AlertService', ['error']);
 
     TestBed.configureTestingModule({
       declarations: [UserDetailComponent],
       providers: [
-        GithubService,
         { provide: ActivatedRoute, useValue: activatedRoute },
-        { provide: GithubService, githubService: githubService }
+        { provide: Router, useClass: class { navigate = jasmine.createSpy('navigate'); } },
+        { provide: GithubService, useValue: githubService },
+        { provide: AlertService, useValue: alertService },
       ],
-      imports: [HttpClientModule, AppModule],
     });
+
     fixture = TestBed.createComponent(UserDetailComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
 });
