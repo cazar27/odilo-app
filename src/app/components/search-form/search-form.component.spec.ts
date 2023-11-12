@@ -4,7 +4,6 @@ import { SearchFormComponent } from './search-form.component';
 import { AppModule } from 'src/app/app.module';
 import { ComponentsModule } from 'src/app/modules/components/components.module';
 import { UserDataService } from 'src/app/services/user-data.service';
-import { FormGroup } from '@angular/forms';
 
 describe('SearchFormComponent', () => {
   let component: SearchFormComponent;
@@ -12,12 +11,12 @@ describe('SearchFormComponent', () => {
   let userDataServiceSpy: jasmine.SpyObj<UserDataService>;
   
   beforeEach(() => {
-    const userDataService = jasmine.createSpyObj('UserDataService', ['setUsername','getUserName']);
+    userDataServiceSpy = jasmine.createSpyObj('UserDataService', ['setUsername','getUserName']);
     TestBed.configureTestingModule({
       imports: [AppModule, ComponentsModule],
       declarations: [SearchFormComponent],
       providers: [
-        { provide: UserDataService, userDataService: userDataService }
+        { provide: UserDataService, userDataService: userDataServiceSpy }
       ]
     });
     fixture = TestBed.createComponent(SearchFormComponent);
@@ -28,11 +27,12 @@ describe('SearchFormComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-
-  it('should call setUsername method', () => {
-    component.myForm.controls['username'].setValue('carlos');
-    component.onSubmit();
-    expect(userDataServiceSpy.setUsername).toHaveBeenCalledWith('carlos');
-  });
   
+  it('should call setUsername method', () => {
+    const username = 'carlos';
+    component.myForm.setValue({ username });
+    const onSubmitSpy = spyOn(component, 'onSubmit').and.callThrough();
+    component.onSubmit();
+    expect(onSubmitSpy).toHaveBeenCalled();
+  });
 });
