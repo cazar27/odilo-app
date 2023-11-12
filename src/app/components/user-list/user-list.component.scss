@@ -8,11 +8,14 @@
   margin: 15px;
 
   .user-header-image {
-    background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
     background-size: cover;
   }
 }
 
 .button-container .mdc-button {
   margin: 15px;
+}
+
+.error-container {
+  padding: 15px;
 }

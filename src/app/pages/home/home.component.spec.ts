@@ -32,4 +32,16 @@ describe('HomeComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should set username when search is called with a non-empty string', () => {
+    const username = 'testUser';
+    component.search(username);
+    expect(component.username).toEqual(username);
+  });
+
+  it('should not set username when search is called with an empty string', () => { 
+    const emptyUsername = '';
+    component.search(emptyUsername);
+    expect(component.username).toEqual('');
+  });
 });

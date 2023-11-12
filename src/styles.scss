@@ -9,42 +9,4 @@ body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
-//TODO: Meter los estilos del snackbar en otro scss en la carpeta de assets
-
-.mat-mdc-snack-bar-container {
-  color: white;
-  &.error-snackbar .mdc-snackbar__surface {
-    background-color: #c50000 !important;
-    border: 2px solid #ff7e7e;
-    .mat-mdc-button.mat-mdc-snack-bar-action:not(:disabled) {
-      color: white;
-    }
-  }
-
-  &.success-snackbar .mdc-snackbar__surface {
-    background-color: #4caf50 !important;
-    border: 2px solid #caf796;
-    .mat-mdc-button.mat-mdc-snack-bar-action:not(:disabled) {
-      color: white;
-    }
-  }
-
-  &.info-snackbar .mdc-snackbar__surface {
-    background-color: #2196F3 !important;
-    border: 2px solid #d9eeff;
-    .mat-mdc-button.mat-mdc-snack-bar-action:not(:disabled) {
-      color: white;
-    }
-  }
-
-  &.warn-snackbar .mdc-snackbar__surface {
-    background-color: #FF9800 !important;
-    border: 2px solid #ffedd2;
-    .mat-mdc-button.mat-mdc-snack-bar-action:not(:disabled) {
-      color: black;
-    }
-    .mat-mdc-snack-bar-label.mdc-snackbar__label {
-      color: black;
-    }
-  }
-}
+@import url('./assets/scss/snackbar.scss');

@@ -1,7 +1,7 @@
 <div *ngIf="isLoader">
   <app-loader></app-loader>
 </div>
-<div *ngIf="error && !isLoader">
+<div *ngIf="error && !isLoader" class="error-container">
   <h3>Hubo un error en la carga de datos</h3>
 </div>
 <div *ngIf="!error && !isLoader && users?.length === 0 && username !==''">

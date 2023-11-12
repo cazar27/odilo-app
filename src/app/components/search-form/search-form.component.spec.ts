@@ -8,14 +8,15 @@ import { UserDataService } from 'src/app/services/user-data.service';
 describe('SearchFormComponent', () => {
   let component: SearchFormComponent;
   let fixture: ComponentFixture<SearchFormComponent>;
-  const userDataService = jasmine.createSpyObj('UserDataService', ['setUsername','getUserName']);
-
+  let userDataServiceSpy: jasmine.SpyObj<UserDataService>;
+  
   beforeEach(() => {
+    userDataServiceSpy = jasmine.createSpyObj('UserDataService', ['setUsername','getUserName']);
     TestBed.configureTestingModule({
       imports: [AppModule, ComponentsModule],
       declarations: [SearchFormComponent],
       providers: [
-        { provide: UserDataService, userDataService: userDataService }
+        { provide: UserDataService, userDataService: userDataServiceSpy }
       ]
     });
     fixture = TestBed.createComponent(SearchFormComponent);
@@ -25,5 +26,13 @@ describe('SearchFormComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+  
+  it('should call setUsername method', () => {
+    const username = 'carlos';
+    component.myForm.setValue({ username });
+    const onSubmitSpy = spyOn(component, 'onSubmit').and.callThrough();
+    component.onSubmit();
+    expect(onSubmitSpy).toHaveBeenCalled();
   });
 });

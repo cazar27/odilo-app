@@ -41,6 +41,10 @@ $dark-theme: mat.define-light-theme(
     border: 2px solid #7b7a7a;
   }
 
+  .error-container h3 {
+    color: white;
+  }
+
   .mdc-text-field--filled {
     border-top-left-radius: 0;
     border-top-right-radius: 0;
